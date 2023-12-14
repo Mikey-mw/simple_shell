@@ -35,7 +35,6 @@
 #define HIST_MAX	4096
 
 extern char **environ;
-B
 
 
 /**
@@ -72,7 +71,7 @@ typedef struct liststr
  *@cmd_buf_type: CMD_type ||, &&, ;
  *@readfd: the fd from which to read line input
  *@histcount: the history line number count
-OOA */
+ */
 typedef struct passinfo
 {
 	char *arg;
@@ -161,7 +160,7 @@ void *_realloc(void *, unsigned int, unsigned int);
 /* toem_memory.c */
 int bfree(void **);
 
-/* _atoi.c */
+/* toem_atoi.c */
 int interactive(info_t *);
 int is_delim(char, char *);
 int _isalpha(int);

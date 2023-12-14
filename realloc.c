@@ -2,61 +2,61 @@
 
 /**
  **_memset - fills memory with a constant byte
- *@mem_ptr: the pointer to the memory area
- *@fill_byte: the byte to fill *mem_ptr with
- *@num_bytes: the amount of bytes to be filled
- *Return: (mem_ptr) a pointer to the memory area mem_ptr
+ *@s: the pointer to the memory area
+ *@b: the byte to fill *s with
+ *@n: the amount of bytes to be filled
+ *Return: (s) a pointer to the memory area s
  */
-char *_memset(char *mem_ptr, char fill_byte, unsigned int num_bytes)
+char *_memset(char *s, char b, unsigned int n)
 {
 	unsigned int i;
 
-	for (i = 0; i < num_bytes; i++)
-		mem_ptr[i] = fill_byte;
-	return (mem_ptr);
+	for (i = 0; i < n; i++)
+		s[i] = b;
+	return (s);
 }
 
 /**
  * ffree - frees a string of strings
- * @string_array: string of strings
+ * @pp: string of strings
  */
-void ffree(char **string_array)
+void ffree(char **pp)
 {
-	char **current_ptr = string_array;
+	char **a = pp;
 
-	if (!string_array)
+	if (!pp)
 		return;
-	while (*string_array)
-		free(*string_array++);
-	free(current_ptr);
+	while (*pp)
+		free(*pp++);
+	free(a);
 }
 
 /**
  * _realloc - reallocates a block of memory
- * @prev_ptr: pointer to previous malloc'ated block
+ * @ptr: pointer to previous malloc'ated block
  * @old_size: byte size of previous block
  * @new_size: byte size of new block
  *
  * Return: pointer to da ol'block nameen.
  */
-void *_realloc(void *prev_ptr, unsigned int old_size, unsigned int new_size)
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
-	char *new_ptr;
+	char *p;
 
-	if (!prev_ptr)
+	if (!ptr)
 		return (malloc(new_size));
 	if (!new_size)
-		return (free(prev_ptr), NULL);
+		return (free(ptr), NULL);
 	if (new_size == old_size)
-		return (prev_ptr);
+		return (ptr);
 
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
+	p = malloc(new_size);
+	if (!p)
 		return (NULL);
 
 	old_size = old_size < new_size ? old_size : new_size;
 	while (old_size--)
-		new_ptr[old_size] = ((char *)prev_ptr)[old_size];
-	free(prev_ptr);
-	return (new_ptr);
+		p[old_size] = ((char *)ptr)[old_size];
+	free(ptr);
+	return (p);
 }
