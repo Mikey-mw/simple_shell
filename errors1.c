@@ -1,24 +1,24 @@
 #include "shell.h"
 
 /**
- * _convertStringToInteger - converts a string to an integer
- * @str: the string to be converted
+ * _erratoi - converts a string to an integer
+ * @sh: the string to be converted
  * Return: 0 if no numbers in string, converted number otherwise
  *       -1 on error
  */
-int _convertStringToInteger(char *str)
+int _erratoi(char *sh)
 {
-	int index = 0;
+	int i = 0;
 	unsigned long int result = 0;
 
-	if (*str == '+')
-		str++;  /* TODO: why does this make main return 255? */
-	for (index = 0;  str[index] != '\0'; index++)
+	if (*sh == '+')
+		sh++;
+	for (i = 0;  sh[i] != '\0'; i++)
 	{
-		if (str[index] >= '0' && str[index] <= '9')
+		if (sh[i] >= '0' && sh[i] <= '9')
 		{
 			result *= 10;
-			result += (str[index] - '0');
+			result += (sh[i] - '0');
 			if (result > INT_MAX)
 				return (-1);
 		}
@@ -29,50 +29,50 @@ int _convertStringToInteger(char *str)
 }
 
 /**
- * displayError - prints an error message
- * @information: the parameter & return information struct
- * @errorString: string containing specified error type
+ * print_error - prints an error message
+ * @info: the parameter & return info struct
+ * @estr: string containing specified error type
  * Return: 0 if no numbers in string, converted number otherwise
  *        -1 on error
  */
-void displayError(info_t *information, char *errorString)
+void print_error(info_t *info, char *estr)
 {
-	_displayString(information->filename);
-	_displayString(": ");
-	_displayStringToFD(convertToString(information->lineCount), STDERR_FILENO);
-	_displayString(": ");
-	_displayString(information->arguments[0]);
-	_displayString(": ");
-	_displayString(errorString);
+	_eputs(info->fname);
+	_eputs(": ");
+	print_d(info->line_count, STDERR_FILENO);
+	_eputs(": ");
+	_eputs(info->argv[0]);
+	_eputs(": ");
+	_eputs(estr);
 }
 
 /**
- * displayInteger - function prints a decimal (integer) number (base 10)
+ * print_d - function prints a decimal (integer) number (base 10)
  * @input: the input
- * @fileDescriptor: the filedescriptor to write to
+ * @fdes: the filedescriptor to write to
  *
  * Return: number of characters printed
  */
-int displayInteger(int input, int fileDescriptor)
+int print_d(int input, int fdes)
 {
 	int (*__putchar)(char) = _putchar;
 	int i, count = 0;
-	unsigned int absoluteValue, current;
+	unsigned int _abs_, current;
 
-	if (fileDescriptor == STDERR_FILENO)
-		__putchar = _displayCharacter;
+	if (fdes == STDERR_FILENO)
+		__putchar = _eputchar;
 	if (input < 0)
 	{
-		absoluteValue = -input;
+		_abs_ = -input;
 		__putchar('-');
 		count++;
 	}
 	else
-		absoluteValue = input;
-	current = absoluteValue;
+		_abs_ = input;
+	current = _abs_;
 	for (i = 1000000000; i > 1; i /= 10)
 	{
-		if (absoluteValue / i)
+		if (_abs_ / i)
 		{
 			__putchar('0' + current / i);
 			count++;
@@ -86,14 +86,14 @@ int displayInteger(int input, int fileDescriptor)
 }
 
 /**
- * convertNumberToString - converter function, a clone of itoa
+ * convert_number - converter function, a clone of itoa
  * @num: number
  * @base: base
- * @flags: argument flags
+ * @flag: argument flags
  *
  * Return: string
  */
-char *convertNumberToString(long int num, int base, int flags)
+char *convert_number(long int num, int base, int flag)
 {
 	static char *array;
 	static char buffer[50];
@@ -101,13 +101,13 @@ char *convertNumberToString(long int num, int base, int flags)
 	char *ptr;
 	unsigned long n = num;
 
-	if (!(flags & CONVERT_UNSIGNED) && num < 0)
+	if (!(flag & CONVERT_UNSIGNED) && num < 0)
 	{
 		n = -num;
 		sign = '-';
 
 	}
-	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+	array = flag & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
 	ptr = &buffer[49];
 	*ptr = '\0';
 
@@ -122,20 +122,19 @@ char *convertNumberToString(long int num, int base, int flags)
 }
 
 /**
- * eliminateComments - function replaces first instance of '#' with '\0'
- * @buffer: address of the string to modify
+ * remove_comments - function replaces first instance of '#' with '\0'
+ * @b: address of the string to modify
  *
  * Return: Always 0;
  */
-void eliminateComments(char *buffer)
+void remove_comments(char *b)
 {
-	int index;
+	int i;
 
-	for (index = 0; buffer[index] != '\0'; index++)
-		if (buffer[index] == '#' && (!index || buffer[index - 1] == ' '))
+	for (i = 0; b[i] != '\0'; i++)
+		if (b[i] == '#' && (!i || b[i - 1] == ' '))
 		{
-			buffer[index] = '\0';
+			b[i] = '\0';
 			break;
 		}
 }
-

@@ -1,75 +1,74 @@
 #include "shell.h"
 
 /**
- **_copyString - copies a string
+ **_strncpy - copies a string
  *@destination: the destination string to be copied to
- *@source: the source string
- *@count: the amount of characters to be copied
+ *@src: the source string
+ *@num: the amount of characters to be copied
  *Return: the concatenated string
  */
-char *_copyString(char *destination, char *source, int count)
+char *_strncpy(char *destination, char *src, int num)
 {
-	int index, j;
-	char *result = destination;
+	int i, j;
+	char *s = destination;
 
-	index = 0;
-	while (source[index] != '\0' && index < count - 1)
+	i = 0;
+	while (src[i] != '\0' && i < num - 1)
 	{
-		destination[index] = source[index];
-		index++;
+		destination[i] = src[i];
+		i++;
 	}
-	if (index < count)
+	if (i < num)
 	{
-		j = index;
-		while (j < count)
+		j = i;
+		while (j < num)
 		{
 			destination[j] = '\0';
 			j++;
 		}
 	}
-	return (result);
+	return (s);
 }
 
 /**
- **_concatenateStrings - concatenates two strings
- *@first: the first string
- *@second: the second string
- *@count: the amount of bytes to be maximally used
+ **_strncat - concatenates two strings
+ *@destination: the first string
+ *@src: the second string
+ *@num: the amount of bytes to be maximally used
  *Return: the concatenated string
  */
-char *_concatenateStrings(char *first, char *second, int count)
+char *_strncat(char *destination, char *src, int num)
 {
 	int i, j;
-	char *result = first;
+	char *s = destination;
 
 	i = 0;
 	j = 0;
-	while (first[i] != '\0')
+	while (destination[i] != '\0')
 		i++;
-	while (second[j] != '\0' && j < count)
+	while (src[j] != '\0' && j < num)
 	{
-		first[i] = second[j];
+		destination[i] = src[j];
 		i++;
 		j++;
 	}
-	if (j < count)
-		first[i] = '\0';
-	return (result);
+	if (j < num)
+		destination[i] = '\0';
+	return (s);
 }
 
 /**
- **_findCharacter - locates a character in a string
- *@stringToSearch: the string to be parsed
- *@characterToFind: the character to look for
- *Return: (stringToSearch) a pointer to the memory area stringToSearch
+ **_strchr - locates a character in a string
+ *@s: the string to be parsed
+ *@ch: the character to look for
+ *Return: (s) a pointer to the memory area s
  */
-char *_findCharacter(char *stringToSearch, char characterToFind)
+char *_strchr(char *s, char ch)
 {
 	do {
-		if (*stringToSearch == characterToFind)
-			return (stringToSearch);
-	} while (*stringToSearch++ != '\0');
+		if (*s == ch)
+			return (s);
+	} while (*s++ != '\0');
 
 	return (NULL);
 }
-

@@ -2,32 +2,32 @@
 
 /**
  **_memset - fills memory with a constant byte
- *@s: the pointer to the memory area
- *@b: the byte to fill *s with
- *@n: the amount of bytes to be filled
- *Return: (s) a pointer to the memory area s
+ *@sh: the pointer to the memory area
+ *@by: the byte to fill *sh with
+ *@num: the amount of bytes to be filled
+ *Return: (sh) a pointer to the memory area s
  */
-char *_memset(char *s, char b, unsigned int n)
+char *_memset(char *sh, char by, unsigned int num)
 {
 	unsigned int i;
 
-	for (i = 0; i < n; i++)
-		s[i] = b;
-	return (s);
+	for (i = 0; i < num; i++)
+		sh[i] = by;
+	return (sh);
 }
 
 /**
  * ffree - frees a string of strings
- * @pp: string of strings
+ * @ss: string of strings
  */
-void ffree(char **pp)
+void ffree(char **ss)
 {
-	char **a = pp;
+	char **a = ss;
 
-	if (!pp)
+	if (!ss)
 		return;
-	while (*pp)
-		free(*pp++);
+	while (*ss)
+		free(*ss++);
 	free(a);
 }
 
