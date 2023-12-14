@@ -1,18 +1,18 @@
 #include "shell.h"
 
 /**
- * _errStringToInt - converts a string to an integer
+ * _convertStringToInteger - converts a string to an integer
  * @str: the string to be converted
  * Return: 0 if no numbers in string, converted number otherwise
  *       -1 on error
  */
-int _errStringToInt(char *str)
+int _convertStringToInteger(char *str)
 {
 	int index = 0;
 	unsigned long int result = 0;
 
 	if (*str == '+')
-		str++;
+		str++;  /* TODO: why does this make main return 255? */
 	for (index = 0;  str[index] != '\0'; index++)
 	{
 		if (str[index] >= '0' && str[index] <= '9')
@@ -29,71 +29,71 @@ int _errStringToInt(char *str)
 }
 
 /**
- * printError - prints an error message
- * @info: the parameter & return info struct
+ * displayError - prints an error message
+ * @information: the parameter & return information struct
  * @errorString: string containing specified error type
  * Return: 0 if no numbers in string, converted number otherwise
  *        -1 on error
  */
-void printError(info_t *info, char *errorString)
+void displayError(info_t *information, char *errorString)
 {
-	_outputString(info->filename);
-	_outputString(": ");
-	printDecimal(info->lineCount, STDERR_FILENO);
-	_outputString(": ");
-	_outputString(info->argv[0]);
-	_outputString(": ");
-	_outputString(errorString);
+	_displayString(information->filename);
+	_displayString(": ");
+	_displayStringToFD(convertToString(information->lineCount), STDERR_FILENO);
+	_displayString(": ");
+	_displayString(information->arguments[0]);
+	_displayString(": ");
+	_displayString(errorString);
 }
 
 /**
- * printDecimal - function prints a decimal (integer) number (base 10)
+ * displayInteger - function prints a decimal (integer) number (base 10)
  * @input: the input
- * @fileDescriptor: the file descriptor to write to
+ * @fileDescriptor: the filedescriptor to write to
  *
  * Return: number of characters printed
  */
-int printDecimal(int input, int fileDescriptor)
+int displayInteger(int input, int fileDescriptor)
 {
-	int (*outputCharacter)(char) = _outputCharacter;
-	int index, count = 0;
+	int (*__putchar)(char) = _putchar;
+	int i, count = 0;
 	unsigned int absoluteValue, current;
 
 	if (fileDescriptor == STDERR_FILENO)
-		outputCharacter = _outputCharacter;
+		__putchar = _displayCharacter;
 	if (input < 0)
 	{
 		absoluteValue = -input;
-		outputCharacter('-');
+		__putchar('-');
 		count++;
 	}
 	else
 		absoluteValue = input;
 	current = absoluteValue;
-	for (index = 1000000000; index > 1; index /= 10)
+	for (i = 1000000000; i > 1; i /= 10)
 	{
-		if (absoluteValue / index)
+		if (absoluteValue / i)
 		{
-			outputCharacter('0' + current / index);
+			__putchar('0' + current / i);
 			count++;
 		}
-		current %= index;
+		current %= i;
 	}
-	outputCharacter('0' + current);
+	__putchar('0' + current);
 	count++;
 
 	return (count);
 }
 
 /**
- * convertNumber - converter function, a clone of itoa
+ * convertNumberToString - converter function, a clone of itoa
  * @num: number
  * @base: base
  * @flags: argument flags
  *
  * Return: string
  */
-char *convertNumber(long int num, int base, int flags)
+char *convertNumberToString(long int num, int base, int flags)
 {
 	static char *array;
 	static char buffer[50];
@@ -105,6 +105,7 @@ char *convertNumber(long int num, int base, int flags)
 	{
 		n = -num;
 		sign = '-';
+
 	}
 	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
 	ptr = &buffer[49];
@@ -121,12 +122,12 @@ char *convertNumber(long int num, int base, int flags)
 }
 
 /**
- * removeComments - function replaces first instance of '#' with '\0'
+ * eliminateComments - function replaces first instance of '#' with '\0'
  * @buffer: address of the string to modify
  *
  * Return: Always 0;
  */
-void removeComments(char *buffer)
+void eliminateComments(char *buffer)
 {
 	int index;
 

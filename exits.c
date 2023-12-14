@@ -1,76 +1,75 @@
 #include "shell.h"
 
 /**
- * _copyStringLimited - copies a string up to a specified limit
- * @destination: the destination string to be copied to
- * @source: the source string
- * @limit: the maximum number of characters to be copied
- * Return: the copied string
+ **_copyString - copies a string
+ *@destination: the destination string to be copied to
+ *@source: the source string
+ *@count: the amount of characters to be copied
+ *Return: the concatenated string
  */
-char *_copyStringLimited(char *destination, char *source, int limit)
+char *_copyString(char *destination, char *source, int count)
 {
-	int indexDest, indexSrc;
+	int index, j;
 	char *result = destination;
 
-	indexDest = 0;
-	while (source[indexSrc] != '\0' && indexSrc < limit - 1)
+	index = 0;
+	while (source[index] != '\0' && index < count - 1)
 	{
-		destination[indexDest] = source[indexSrc];
-		indexDest++;
-		indexSrc++;
+		destination[index] = source[index];
+		index++;
 	}
-	if (indexSrc < limit)
+	if (index < count)
 	{
-		int newIndex = indexSrc;
-		while (newIndex < limit)
+		j = index;
+		while (j < count)
 		{
-			destination[newIndex] = '\0';
-			newIndex++;
+			destination[j] = '\0';
+			j++;
 		}
 	}
-	return result;
+	return (result);
 }
 
 /**
- * _concatenateStringsLimited - concatenates two strings up to a specified limit
- * @destination: the first string
- * @source: the second string
- * @limit: the maximum number of bytes to be used
- * Return: the concatenated string
+ **_concatenateStrings - concatenates two strings
+ *@first: the first string
+ *@second: the second string
+ *@count: the amount of bytes to be maximally used
+ *Return: the concatenated string
  */
-char *_concatenateStringsLimited(char *destination, char *source, int limit)
+char *_concatenateStrings(char *first, char *second, int count)
 {
-	int indexDest, indexSrc;
-	char *result = destination;
+	int i, j;
+	char *result = first;
 
-	indexDest = 0;
-	while (destination[indexDest] != '\0')
-		indexDest++;
-	indexSrc = 0;
-	while (source[indexSrc] != '\0' && indexSrc < limit)
+	i = 0;
+	j = 0;
+	while (first[i] != '\0')
+		i++;
+	while (second[j] != '\0' && j < count)
 	{
-		destination[indexDest] = source[indexSrc];
-		indexDest++;
-		indexSrc++;
+		first[i] = second[j];
+		i++;
+		j++;
 	}
-	if (indexSrc < limit)
-		destination[indexDest] = '\0';
-	return result;
+	if (j < count)
+		first[i] = '\0';
+	return (result);
 }
 
 /**
- * _findCharacter - locates a character in a string
- * @stringToSearch: the string to be parsed
- * @characterToFind: the character to look for
- * Return: (stringToSearch) a pointer to the memory area stringToSearch
+ **_findCharacter - locates a character in a string
+ *@stringToSearch: the string to be parsed
+ *@characterToFind: the character to look for
+ *Return: (stringToSearch) a pointer to the memory area stringToSearch
  */
 char *_findCharacter(char *stringToSearch, char characterToFind)
 {
 	do {
 		if (*stringToSearch == characterToFind)
-			return stringToSearch;
+			return (stringToSearch);
 	} while (*stringToSearch++ != '\0');
 
-	return NULL;
+	return (NULL);
 }
 

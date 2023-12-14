@@ -1,98 +1,98 @@
 #include "shell.h"
 
 /**
- * _terminateShell - exits the shell
- * @data: Structure containing potential arguments. Used to maintain
+ * _exit_shell - exits the shell
+ * @info: Structure containing potential arguments. Used to maintain
  *          constant function prototype.
  *  Return: exits with a given exit status
- *         (0) if data->argv[0] != "exit"
+ *         (0) if info.argv[0] != "exit"
  */
-int _terminateShell(info_t *data)
+int _exit_shell(info_t *info)
 {
-	int exitCheck;
+	int exit_check;
 
-	if (data->argv[1])  /* If there is an exit argument */
+	if (info->argv[1])  /* If there is an exit argument */
 	{
-		exitCheck = _errAtoi(data->argv[1]);
-		if (exitCheck == -1)
+		exit_check = _err_atoi(info->argv[1]);
+		if (exit_check == -1)
 		{
-			data->status = 2;
-			printError(data, "Illegal number: ");
-			_ePuts(data->argv[1]);
-			_ePutchar('\n');
+			info->status = 2;
+			print_error(info, "Illegal number: ");
+			_eputs(info->argv[1]);
+			_eputchar('\n');
 			return (1);
 		}
-		data->errNum = _errAtoi(data->argv[1]);
+		info->err_num = _err_atoi(info->argv[1]);
 		return (-2);
 	}
-	data->errNum = -1;
+	info->err_num = -1;
 	return (-2);
 }
 
 /**
- * _changeDirectory - changes the current directory of the process
- * @data: Structure containing potential arguments. Used to maintain
+ * _change_directory - changes the current directory of the process
+ * @info: Structure containing potential arguments. Used to maintain
  *          constant function prototype.
  *  Return: Always 0
  */
-int _changeDirectory(info_t *data)
+int _change_directory(info_t *info)
 {
-	char *str, *directory, buffer[1024];
-	int chdirRet;
+	char *s, *dir, buffer[1024];
+	int chdir_ret;
 
-	str = getcwd(buffer, 1024);
-	if (!str)
+	s = getcwd(buffer, 1024);
+	if (!s)
 		_puts("TODO: >>getcwd failure emsg here<<\n");
-	if (!data->argv[1])
+	if (!info->argv[1])
 	{
-		directory = _getEnv(data, "HOME=");
-		if (!directory)
-			chdirRet = /* TODO: what should this be? */
-				chdir((directory = _getEnv(data, "PWD=")) ? directory : "/");
+		dir = _get_env(info, "HOME=");
+		if (!dir)
+			chdir_ret = /* TODO: what should this be? */
+				chdir((dir = _get_env(info, "PWD=")) ? dir : "/");
 		else
-			chdirRet = chdir(directory);
+			chdir_ret = chdir(dir);
 	}
-	else if (_strcmp(data->argv[1], "-") == 0)
+	else if (_strcmp(info->argv[1], "-") == 0)
 	{
-		if (!_getEnv(data, "OLDPWD="))
+		if (!_get_env(info, "OLDPWD="))
 		{
-			_puts(str);
+			_puts(s);
 			_putchar('\n');
 			return (1);
 		}
-		_puts(_getEnv(data, "OLDPWD=")), _putchar('\n');
-		chdirRet = /* TODO: what should this be? */
-			chdir((directory = _getEnv(data, "OLDPWD=")) ? directory : "/");
+		_puts(_get_env(info, "OLDPWD=")), _putchar('\n');
+		chdir_ret = /* TODO: what should this be? */
+			chdir((dir = _get_env(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
-		chdirRet = chdir(data->argv[1]);
-	if (chdirRet == -1)
+		chdir_ret = chdir(info->argv[1]);
+	if (chdir_ret == -1)
 	{
-		printError(data, "can't cd to ");
-		_ePuts(data->argv[1]), _ePutchar('\n');
+		print_error(info, "can't cd to ");
+		_eputs(info->argv[1]), _eputchar('\n');
 	}
 	else
 	{
-		_setEnv(data, "OLDPWD", _getEnv(data, "PWD="));
-		_setEnv(data, "PWD", getcwd(buffer, 1024));
+		_set_env(info, "OLDPWD", _get_env(info, "PWD="));
+		_set_env(info, "PWD", getcwd(buffer, 1024));
 	}
 	return (0);
 }
 
 /**
- * _showHelp - displays help information
- * @data: Structure containing potential arguments. Used to maintain
+ * _show_help - displays help information
+ * @info: Structure containing potential arguments. Used to maintain
  *          constant function prototype.
  *  Return: Always 0
  */
-int _showHelp(info_t *data)
+int _show_help(info_t *info)
 {
-	char **argArray;
+	char **arg_array;
 
-	argArray = data->argv;
+	arg_array = info->argv;
 	_puts("help call works. Function not yet implemented \n");
 	if (0)
-		_puts(*argArray); /* temp att_unused workaround */
+		_puts(*arg_array); /* temp att_unused workaround */
 	return (0);
 }
 
