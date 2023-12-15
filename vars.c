@@ -10,28 +10,28 @@
  */
 int is_chain(info_t *info, char *buf, size_t *p)
 {
-	size_t j = *p;
+	size_t k = *p;
 
-	if (buf[j] == '|' && buf[j + 1] == '|')
+	if (buf[k] == '|' && buf[k + 1] == '|')
 	{
-		buf[j] = 0;
-		j++;
+		buf[k] = 0;
+		k++;
 		info->cmd_buf_type = CMD_OR;
 	}
-	else if (buf[j] == '&' && buf[j + 1] == '&')
+	else if (buf[k] == '&' && buf[k + 1] == '&')
 	{
-		buf[j] = 0;
-		j++;
+		buf[k] = 0;
+		k++;
 		info->cmd_buf_type = CMD_AND;
 	}
-	else if (buf[j] == ';') /* found end of this command */
+	else if (buf[k] == ';') /* found end of this command */
 	{
-		buf[j] = 0; /* replace semicolon with null */
+		buf[k] = 0; /* replace semicolon with null */
 		info->cmd_buf_type = CMD_CHAIN;
 	}
 	else
 		return (0);
-	*p = j;
+	*p = k;
 	return (1);
 }
 
@@ -47,14 +47,14 @@ int is_chain(info_t *info, char *buf, size_t *p)
  */
 void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
 {
-	size_t j = *p;
+	size_t k = *p;
 
 	if (info->cmd_buf_type == CMD_AND)
 	{
 		if (info->status)
 		{
 			buf[i] = 0;
-			j = len;
+			k = len;
 		}
 	}
 	if (info->cmd_buf_type == CMD_OR)
@@ -62,11 +62,11 @@ void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
 		if (!info->status)
 		{
 			buf[i] = 0;
-			j = len;
+			k = len;
 		}
 	}
 
-	*p = j;
+	*p = k;
 }
 
 /**
@@ -77,11 +77,11 @@ void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
  */
 int replace_alias(info_t *info)
 {
-	int i;
+	int j;
 	list_t *node;
 	char *p;
 
-	for (i = 0; i < 10; i++)
+	for (j = 0; j < 10; j++)
 	{
 		node = node_starts_with(info->alias, info->argv[0], '=');
 		if (!node)
@@ -106,34 +106,34 @@ int replace_alias(info_t *info)
  */
 int replace_vars(info_t *info)
 {
-	int i = 0;
+	int j = 0;
 	list_t *node;
 
-	for (i = 0; info->argv[i]; i++)
+	for (j = 0; info->argv[j]; j++)
 	{
-		if (info->argv[i][0] != '$' || !info->argv[i][1])
+		if (info->argv[j][0] != '$' || !info->argv[j][1])
 			continue;
 
-		if (!_strcmp(info->argv[i], "$?"))
+		if (!_strcmp(info->argv[j], "$?"))
 		{
-			replace_string(&(info->argv[i]),
+			replace_string(&(info->argv[j]),
 				_strdup(convert_number(info->status, 10, 0)));
 			continue;
 		}
-		if (!_strcmp(info->argv[i], "$$"))
+		if (!_strcmp(info->argv[j], "$$"))
 		{
-			replace_string(&(info->argv[i]),
+			replace_string(&(info->argv[j]),
 				_strdup(convert_number(getpid(), 10, 0)));
 			continue;
 		}
-		node = node_starts_with(info->env, &info->argv[i][1], '=');
+		node = node_starts_with(info->env, &info->argv[j][1], '=');
 		if (node)
 		{
-			replace_string(&(info->argv[i]),
+			replace_string(&(info->argv[j]),
 				_strdup(_strchr(node->str, '=') + 1));
 			continue;
 		}
-		replace_string(&info->argv[i], _strdup(""));
+		replace_string(&info->argv[j], _strdup(""));
 
 	}
 	return (0);
